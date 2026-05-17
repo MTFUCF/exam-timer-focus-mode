@@ -2,7 +2,7 @@
 
 Exam Timer + Focus Mode Practice Simulator is a focused cybersecurity portfolio project owned by Matthew Faber. The goal is straightforward: A lightweight frontend plus Azure Functions placeholder backend for running timed study sessions, tracking simple summaries, and demonstrating Azure Static Web Apps structure without overbuilding the UI. Deployment target is Azure Static Web Apps with Azure Functions. The stack is HTML5, CSS3, Vanilla JavaScript, Azure Static Web Apps, Azure Functions (Node 20). Keep the repo easy to review, easy to explain in an interview, and easy to deploy from a clean branch.
 
-When helping here, bias toward the smallest useful implementation. Preserve the deliberate no-build-step approach for the frontend. If the project uses Azure Functions, keep Node tooling isolated to `api/` and do not introduce root-level package management. Prefer plain HTML, CSS, and vanilla JavaScript that a recruiter can understand quickly by opening the repo.
+When helping here, bias toward the smallest useful implementation. Preserve the deliberate no-build-step approach for the frontend. If the project uses Azure Functions, keep Node tooling isolated to `api/` and do not introduce root-level package management. Prefer plain HTML, CSS, and vanilla JavaScript that reads clearly.
 
 What Copilot should help with:
 - Build timer controls, focus-mode UI states, and session summaries with plain browser APIs first.
