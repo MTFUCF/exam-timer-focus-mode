@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Exam Timer Focus Mode</title>
+    <meta name="description" content="SC-900 study-aid exam simulator with timer, review mode, and focus controls." />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div>
+        <p class="eyebrow">Study aid · not real exam content</p>
+        <h1>Exam Timer Focus Mode</h1>
+        <p class="subtle">Practice SC-900-style multiple choice in a calm, recruiter-friendly browser app.</p>
+      </div>
+      <div class="header-actions">
+        <button id="focusToggle" class="secondary-button" type="button">Focus mode</button>
+        <button id="fullscreenToggle" class="secondary-button" type="button">Full screen</button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section id="welcomeScreen" class="panel stack-lg">
+        <div class="stack-sm">
+          <p class="eyebrow">Welcome</p>
+          <h2>Practice with timing pressure, flags, and review feedback.</h2>
+          <p>These are original study-aid questions sourced to Microsoft Learn topics. They are not official Pearson VUE or Microsoft exam items.</p>
+        </div>
+
+        <form id="setupForm" class="setup-grid">
+          <fieldset class="option-card">
+            <legend>Exam</legend>
+            <label class="radio-card">
+              <input type="radio" name="exam" value="SC-900" checked />
+              <span><strong>SC-900</strong><small>Security, Compliance, and Identity Fundamentals</small></span>
+            </label>
+            <label class="radio-card muted-card">
+              <input type="radio" name="exam" value="AZ-900" disabled />
+              <span><strong>AZ-900</strong><small>Reserved for a future question pack</small></span>
+            </label>
+          </fieldset>
+
+          <fieldset class="option-card compact-options">
+            <legend>Duration</legend>
+            <label><input type="radio" name="duration" value="45" checked /> 45 minutes</label>
+            <label><input type="radio" name="duration" value="60" /> 60 minutes</label>
+          </fieldset>
+
+          <fieldset class="option-card compact-options">
+            <legend>Question count</legend>
+            <label><input type="radio" name="questionCount" value="15" checked /> 15 questions</label>
+            <label><input type="radio" name="questionCount" value="30" /> 30 questions</label>
+            <label><input type="radio" name="questionCount" value="50" /> 50 questions</label>
+          </fieldset>
+
+          <div class="option-card stack-sm">
+            <h3>Keyboard</h3>
+            <ul class="plain-list small-text">
+              <li>1/2/3/4 or A/B/C/D selects an answer</li>
+              <li>Space toggles flag for review</li>
+              <li>Enter moves next</li>
+              <li>Esc pauses or resumes</li>
+            </ul>
+            <button class="primary-button" type="submit">Start practice exam</button>
+          </div>
+        </form>
+
+        <section class="history-panel">
+          <div>
+            <p class="eyebrow">History</p>
+            <h3>Recent attempts</h3>
+          </div>
+          <ul id="historyList" class="history-list"></ul>
+        </section>
+      </section>
+
+      <section id="examScreen" class="hidden stack-lg" aria-live="polite">
+        <div class="exam-toolbar panel">
+          <div>
+            <p id="pauseIndicator" class="pause-indicator hidden">Exam paused due to tab switch.</p>
+            <p class="subtle small-text">Educational pause signal only — this is not actual proctoring.</p>
+          </div>
+          <div class="exam-toolbar-right">
+            <div class="timer-card">
+              <span>Time remaining</span>
+              <strong id="timerDisplay">45:00</strong>
+            </div>
+            <button id="pauseButton" class="secondary-button" type="button">Pause</button>
+            <button id="submitButton" class="secondary-button" type="button">Submit</button>
+          </div>
+        </div>
+
+        <article class="panel question-panel">
+          <div class="question-header">
+            <div>
+              <p class="eyebrow">Question <span id="questionNumber">1</span> of <span id="questionTotal">15</span></p>
+              <span id="domainBadge" class="domain-badge">Concepts</span>
+            </div>
+            <button id="flagButton" class="secondary-button" type="button">Flag for review</button>
+          </div>
+          <h2 id="questionText">Loading question...</h2>
+          <form id="choicesForm" class="choices-list"></form>
+        </article>
+
+        <div class="exam-nav panel">
+          <button id="previousButton" class="secondary-button" type="button">Previous</button>
+          <button id="nextButton" class="primary-button" type="button">Next</button>
+        </div>
+
+        <section class="panel stack-sm">
+          <div class="index-header">
+            <h3>Question index</h3>
+            <p class="small-text subtle">Gray = unanswered · blue = answered · gold = flagged</p>
+          </div>
+          <div id="questionIndexBar" class="question-index-bar"></div>
+        </section>
+      </section>
+
+      <section id="reviewScreen" class="hidden stack-lg">
+        <div class="panel review-summary">
+          <div>
+            <p class="eyebrow">Review</p>
+            <h2 id="scoreHeading">Score: 0%</h2>
+            <p id="scoreMeta" class="subtle">0 correct out of 0</p>
+          </div>
+          <button id="restartButton" class="primary-button" type="button">Start another attempt</button>
+        </div>
+
+        <section class="panel stack-sm">
+          <h3>Domain breakdown</h3>
+          <div id="domainBreakdown" class="domain-grid"></div>
+        </section>
+
+        <section class="panel stack-sm">
+          <h3>Incorrect answers</h3>
+          <div id="incorrectList" class="incorrect-list"></div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>Built by Matthew Faber · <a href="https://github.com/matthewfaber/exam-timer-focus-mode" rel="noopener">source</a></span>
+    </footer>
+
+    <dialog id="submitDialog">
+      <form method="dialog" class="stack-sm">
+        <h3>Submit exam?</h3>
+        <p id="submitSummary">You still have unanswered or flagged questions.</p>
+        <div class="dialog-actions">
+          <button class="secondary-button" value="cancel">Keep working</button>
+          <button id="confirmSubmitButton" class="primary-button" value="default">Submit now</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script type="module" src="src/app.js"></script>
+  </body>
+</html>
